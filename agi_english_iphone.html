@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<title>AGI English — Aula prática</title>
+<style>
+:root{color-scheme:dark;--bg:#101010;--panel:#1b1b1b;--muted:#aaa;--accent:#d6ff3f;--line:#333}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:680px;margin:auto;padding:22px 18px 44px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
+.logo{font-weight:900;letter-spacing:1px;font-size:21px}.logo span{color:var(--accent)}
+.tag{font-size:12px;color:var(--accent);border:1px solid #4a5520;padding:7px 10px;border-radius:99px}
+h1{font-size:31px;line-height:1.1;margin:0 0 10px}
+p{color:#c7c7c7;line-height:1.5}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px;margin:18px 0}
+.kicker{font-size:12px;letter-spacing:1.5px;color:var(--accent);font-weight:800;text-transform:uppercase}
+.phrase{font-size:27px;font-weight:750;line-height:1.25;margin:14px 0}
+.pron{font-size:17px;color:#d4d4d4;margin:8px 0}
+.translation{font-size:16px;color:#aaa;margin:12px 0 18px}
+button{font:inherit;border:0;border-radius:13px;padding:14px 16px;cursor:pointer;font-weight:750}
+.primary{background:var(--accent);color:#101010;width:100%}
+.secondary{background:#303030;color:#fff;border:1px solid #444}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+label{display:block;font-size:14px;color:#ccc;margin:16px 0 8px}
+textarea{width:100%;min-height:90px;resize:vertical;border-radius:12px;border:1px solid #444;background:#111;color:white;padding:13px;font:inherit}
+select{width:100%;background:#111;color:white;border:1px solid #444;border-radius:12px;padding:12px;font:inherit}
+.feedback{min-height:24px;color:var(--accent);font-size:14px;margin-top:12px}
+.progress{height:6px;background:#333;border-radius:20px;overflow:hidden;margin:14px 0 5px}.bar{height:100%;width:20%;background:var(--accent);transition:width .2s}
+.small{font-size:13px;color:var(--muted)}
+footer{text-align:center;color:#777;font-size:12px;margin-top:28px}
+@media(min-width:560px){main{padding-top:36px}.phrase{font-size:32px}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="logo">AGI <span>ENGLISH</span></div><div class="tag">VERSÃO DE TESTE</div></header>
+<div class="kicker">Inglês para situações reais</div>
+<h1>Pratique um pouco.<br>Avance todos os dias.</h1>
+<p>Uma frase por vez, com tradução, pronúncia aproximada e áudio em inglês quando o navegador permitir.</p>
+
+<section class="panel">
+<div class="kicker" id="lessonLabel">Aula 01 · Recepção</div>
+<div class="phrase" id="phrase">Hello! How are you today?</div>
+<div class="pron" id="pron">Rê-lôu! Ráu ar iú tuh-dêi?</div>
+<div class="translation" id="translation">Olá! Como você está hoje?</div>
+<button class="primary" id="speak">▶ Ouvir frase em inglês</button>
+<div class="actions">
+<button class="secondary" id="slower">🐢 Ouvir devagar</button>
+<button class="secondary" id="next">Próxima frase →</button>
+</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="small" id="count">Frase 1 de 5</div>
+</section>
+
+<section class="panel">
+<div class="kicker">Sua vez</div>
+<label for="attempt">Escreva sua tentativa em inglês</label>
+<textarea id="attempt" placeholder="Digite aqui a frase que você tentou falar..."></textarea>
+<button class="primary" id="check" style="margin-top:12px">Conferir minha tentativa</button>
+<div class="feedback" id="feedback" aria-live="polite"></div>
+<p class="small">Este protótipo não usa IA para avaliar a resposta; ele confere se sua frase está próxima do exemplo.</p>
+</section>
+
+<section class="panel">
+<div class="kicker">Escolha uma situação</div>
+<label for="scenario">O que você quer praticar?</label>
+<select id="scenario">
+<option value="service">Atender um cliente</option>
+<option value="cafe">Pedir café</option>
+<option value="directions">Pedir informações</option>
+</select>
+<p class="small">A seleção troca as frases da aula. Seu progresso é apenas desta sessão.</p>
+</section>
+<footer>AGI English · Protótipo local para testar no iPhone</footer>
+</main>
+<script>
+const lessons={
+service:[
+["Hello! How are you today?","Rê-lôu! Ráu ar iú tuh-dêi?","Olá! Como você está hoje?","Aula 01 · Recepção"],
+["How can I help you?","Ráu kén ai rélp iú?","Como posso ajudar você?","Aula 01 · Recepção"],
+["Would you like water or coffee?","Uúd iú láik uóter ór cófi?","Você gostaria de água ou café?","Aula 01 · Recepção"],
+["Please, make yourself comfortable.","Plíz, mêik iór-self câmf-ter-bol.","Por favor, fique à vontade.","Aula 01 · Recepção"],
+["Let me know if you need anything.","Lét mi nôu if iú níd éni-thin.","Avise-me se precisar de alguma coisa.","Aula 01 · Recepção"]],
+cafe:[
+["Can I have a coffee, please?","Kén ai rév a cófi, plíz?","Posso pedir um café, por favor?","Aula 02 · No café"],
+["Can I have a large coffee?","Kén ai rév a lárdj cófi?","Posso pedir um café grande?","Aula 02 · No café"],
+["How much is this coffee?","Ráu match iz dhis cófi?","Quanto custa este café?","Aula 02 · No café"],
+["Can I get the bill, please?","Kén ai guét dhâ bil, plíz?","Pode trazer a conta, por favor?","Aula 02 · No café"],
+["Thank you. Have a nice day!","Thénk iú. Rév a náis dêi!","Obrigado(a). Tenha um bom dia!","Aula 02 · No café"]],
+directions:[
+["Excuse me, where is the station?","Eks-kiúz mi, uér iz dhâ stêi-shân?","Com licença, onde fica a estação?","Aula 03 · Informações"],
+["Is it on the left?","Iz it on dhâ léft?","Fica à esquerda?","Aula 03 · Informações"],
+["Is it on the right?","Iz it on dhâ ráit?","Fica à direita?","Aula 03 · Informações"],
+["Go ahead, then turn left.","Gôu a-réd, dhén târn léft.","Siga em frente e depois vire à esquerda.","Aula 03 · Informações"],
+["Thank you for your help.","Thénk iú fór iór rélp.","Obrigado(a) pela ajuda.","Aula 03 · Informações"]]
+};
+let currentSet="service", index=0;
+const $=id=>document.getElementById(id);
+function render(){const x=lessons[currentSet][index];$("phrase").textContent=x[0];$("pron").textContent=x[1];$("translation").textContent=x[2];$("lessonLabel").textContent=x[3];$("count").textContent=`Frase ${index+1} de ${lessons[currentSet].length}`;$("bar").style.width=((index+1)/lessons[currentSet].length*100)+"%";$("attempt").value="";$("feedback").textContent="";}
+function speak(rate){if(!("speechSynthesis" in window)){ $("feedback").textContent="Este navegador não disponibilizou o áudio. Tente abrir no Safari e verificar o som.";return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lessons[currentSet][index][0]);u.lang="en-US";u.rate=rate;window.speechSynthesis.speak(u);}
+$("speak").addEventListener("click",()=>speak(.88));
+$("slower").addEventListener("click",()=>speak(.65));
+$("next").addEventListener("click",()=>{index=(index+1)%lessons[currentSet].length;render();});
+$("check").addEventListener("click",()=>{const answer=$("attempt").value.trim().toLowerCase().replace(/[!?.,]/g,"").replace(/\s+/g," ");const target=lessons[currentSet][index][0].toLowerCase().replace(/[!?.,]/g,"").replace(/\s+/g," ");if(!answer){$("feedback").textContent="Digite sua tentativa primeiro. Sem pressa!";return;}if(answer===target){$("feedback").textContent="Muito bem! A frase está igual ao exemplo. 🎉";}else{$("feedback").textContent="Boa tentativa! Compare com a frase acima e tente novamente. Dica: confira as palavras e a ordem.";}});
+$("scenario").addEventListener("change",e=>{currentSet=e.target.value;index=0;render();});
+render();
+</script>
+</body>
+</html>
